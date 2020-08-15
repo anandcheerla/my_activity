@@ -9,7 +9,7 @@ import db from './firebase.js';
 function App() {
 
   const [activities,setActivities] = useState([]);
-
+  const [loggedIn,setLoggedIn] = useState(false);
 
   useEffect(()=>{
     db.collection("activityCollection").orderBy('timeStamp','asc').onSnapshot(snapshot=>{
@@ -20,6 +20,15 @@ function App() {
   const activitySubmit = (event)=>{
     event.preventDefault();
     let text = document.getElementById("filled-basic");
+    if(!loggedIn)
+    {
+      if(text.value==="i am akc")
+        setLoggedIn(true);
+
+      text.value='';
+      return;
+    }
+
     db.collection("activityCollection").add({
       activityName: text.value,
       timeStamp: new Date()
@@ -71,33 +80,38 @@ function App() {
 
   return (
     <div className="App">
-      <div>
-        <form noValidate autoComplete="off">
-          <div>  
-            <TextField id="filled-basic" label="Enter Activity" variant="filled" />
-            <Button type="submit" onClick={activitySubmit} color="primary">
-              submit
-            </Button>
+          <div>
+            <form noValidate autoComplete="off">
+              <div>  
+                <TextField id="filled-basic" label="Enter Activity" variant="filled" />
+                <Button type="submit" onClick={activitySubmit} color="primary">
+                  submit
+                </Button>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
 
-      <div className="App-activities-outer-div">
-        {
-          activities.map(activityObj=>{
-            return <div className="App-activities">
-                     <div>
-                      {activityObj.activityName}
-                     </div>
-                     <div id="App-activity-duration">
-                        { calculateDuration(activityObj.timeStamp) }
-                     </div>
-                    
-                   </div>
-          })
+          {
+          loggedIn
+          &&
+          <div className="App-activities-outer-div">
+            {
+              activities.map(activityObj=>{
+                return <div className="App-activities">
+                         <div>
+                          {activityObj.activityName}
+                         </div>
+                         <div id="App-activity-duration">
+                            { calculateDuration(activityObj.timeStamp) }
+                         </div>
+                        
+                       </div>
+              })
 
-        }
-      </div>
+            }
+          </div>
+          }
+         
 
     </div>
   );
