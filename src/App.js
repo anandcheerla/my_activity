@@ -10,6 +10,7 @@ function App() {
 
   const [activities,setActivities] = useState([]);
   const [loggedIn,setLoggedIn] = useState(false);
+  const [darkMode,setDarkMode] = useState(false);
 
   useEffect(()=>{
     db.collection("activityCollection").orderBy('timeStamp','asc').onSnapshot(snapshot=>{
@@ -77,7 +78,6 @@ function App() {
 
   }
 
-
   const chooseTheme = (e)=>{
       e.preventDefault();
 
@@ -85,24 +85,29 @@ function App() {
         document.getElementsByTagName("body")[0].style.background = "#212121";
         document.getElementById("App-activity-input").style.background = "grey";
         document.getElementById("App-activity-input").style.borderRadius = "5px";
-        document.querySelectorAll(".App-activities").forEach(activity=>{
-          activity.style.background = "#0F171E";
-          activity.style.color = "white";
-        });
+        setDarkMode(true);
         e.target.innerHTML="Disable";
       }
       else{
          document.getElementsByTagName("body")[0].style.background = "none";
          document.getElementById("App-activity-input").style.background = "none";
          document.getElementById("App-activity-input").style.borderRadius = "none";
-         document.querySelectorAll(".App-activities").forEach(activity=>{
-          activity.style.background = "#F1F1F1";
-          activity.style.color = "black";
-        });
+         setDarkMode(false);
         e.target.innerHTML="Dark mode";
       }
 
   }
+
+  let activity_style_dark_mode={
+    "background":"#0F171E",
+    "color": "white"
+  };
+
+  let activity_style_normal_mode={
+    "background":"#F1F1F1",
+    "color": "black"
+  };
+
 
   return (
     <div className="App">
@@ -115,7 +120,7 @@ function App() {
                 </Button>
               </div>
               <div>
-                <button onClick={chooseTheme}>Dark mode</button>
+                <button id="App-dark-mode-button" onClick={chooseTheme}>Dark mode</button>
               </div>
             </form>
           </div>
@@ -126,7 +131,7 @@ function App() {
           <div className="App-activities-outer-div">
             {
               activities.map(activityObj=>{
-                return <div className="App-activities">
+                return <div style={ darkMode ? activity_style_dark_mode : activity_style_normal_mode} className="App-activities">
                          <div>
                           {activityObj.activityName}
                          </div>
