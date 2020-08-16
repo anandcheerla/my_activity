@@ -6,11 +6,6 @@
 
 }
 
-body{
-    /*background: black;*/
-
-}
-
 
 
 .App{
@@ -32,5 +27,8 @@ body{
   border-radius: 10px;
   margin-bottom: 10px;
   background: #F1F1F1;
+ /* color: white;
+  background: #0F171E;*/
 
 }
+

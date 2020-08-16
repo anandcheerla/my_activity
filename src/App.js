@@ -19,7 +19,7 @@ function App() {
 
   const activitySubmit = (event)=>{
     event.preventDefault();
-    let text = document.getElementById("filled-basic");
+    let text = document.getElementById("App-activity-input");
     if(!loggedIn)
     {
       if(text.value==="i am akc")
@@ -78,15 +78,44 @@ function App() {
   }
 
 
+  const chooseTheme = (e)=>{
+      e.preventDefault();
+
+      if(e.target.innerHTML==="Dark mode"){
+        document.getElementsByTagName("body")[0].style.background = "#212121";
+        document.getElementById("App-activity-input").style.background = "grey";
+        document.getElementById("App-activity-input").style.borderRadius = "5px";
+        document.querySelectorAll(".App-activities").forEach(activity=>{
+          activity.style.background = "#0F171E";
+          activity.style.color = "white";
+        });
+        e.target.innerHTML="Disable";
+      }
+      else{
+         document.getElementsByTagName("body")[0].style.background = "none";
+         document.getElementById("App-activity-input").style.background = "none";
+         document.getElementById("App-activity-input").style.borderRadius = "none";
+         document.querySelectorAll(".App-activities").forEach(activity=>{
+          activity.style.background = "#F1F1F1";
+          activity.style.color = "black";
+        });
+        e.target.innerHTML="Dark mode";
+      }
+
+  }
+
   return (
     <div className="App">
           <div>
             <form noValidate autoComplete="off">
               <div>  
-                <TextField id="filled-basic" label="Enter Activity" variant="filled" />
+                <TextField id="App-activity-input" label="Enter Activity" variant="filled" />
                 <Button type="submit" onClick={activitySubmit} color="primary">
                   submit
                 </Button>
+              </div>
+              <div>
+                <button onClick={chooseTheme}>Dark mode</button>
               </div>
             </form>
           </div>
