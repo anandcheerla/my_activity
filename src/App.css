@@ -18,8 +18,12 @@
   margin-bottom: 20px;
 }
 
+.Activity-activity{
+  display: flex;
+  align-items: center;
+}
 
-.App-activities{
+.Activity-activity-data{
 
   border: 1px solid grey;
   padding: 10px;

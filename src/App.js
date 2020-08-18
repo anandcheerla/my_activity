@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import './App.css';
+import Activity from './Activity.js';
 
 import db from './firebase.js';
 
@@ -13,8 +14,13 @@ function App() {
   const [darkMode,setDarkMode] = useState(false);
 
   useEffect(()=>{
-    db.collection("activityCollection").orderBy('timeStamp','asc').onSnapshot(snapshot=>{
-      setActivities(snapshot.docs.map(doc=>{return doc.data()}));
+    db.collection("activityCollectionTest").orderBy('timeStamp','asc').onSnapshot(snapshot=>{
+      // debugger;
+      setActivities(snapshot.docs.map(doc=>{
+        let obj=doc.data();
+        obj.id=doc.id;
+        return obj;
+      }));
     });
   },[]);
 
@@ -30,53 +36,16 @@ function App() {
       return;
     }
 
-    db.collection("activityCollection").add({
+    db.collection("activityCollectionTest").add({
       activityName: text.value,
-      timeStamp: new Date()
+      timeStamp: new Date(),
+      activityDone: false
     });
     // setActivities([...activities,text.value]);
     text.value='';
 
   }
 
-  const calculateDuration = (time_lv)=>{ 
-
-    let currentTs = new Date();
-    let activityTs = time_lv.toDate();
-    let diff=currentTs-activityTs;
-    let minutes=diff/(1000*60);   //1000 is for milli seconds and 60 for seconds
-
-    let uploadedTime;
-    if(Math.floor(minutes/60)>0){
-      if(Math.floor(minutes/(60*24))>0){
-        uploadedTime=Math.floor(minutes/(60*24));
-        if(uploadedTime===1)
-          uploadedTime+=" day ago";
-        else
-          uploadedTime+=" days ago";
-      }
-      else{
-        uploadedTime=Math.floor(minutes/60);
-        if(uploadedTime===1)
-          uploadedTime+=" hour ago";
-        else
-          uploadedTime+=" hours ago";
-      }
-    }
-    else{
-        uploadedTime=Math.floor(minutes); 
-        if(uploadedTime<2)
-          uploadedTime="Just now";
-        else
-          uploadedTime+=" min ago";    
-    }
-
-
-    return uploadedTime;
-
-
-
-  }
 
   const chooseTheme = (e)=>{
       e.preventDefault();
@@ -98,15 +67,6 @@ function App() {
 
   }
 
-  let activity_style_dark_mode={
-    "background":"#0F171E",
-    "color": "white"
-  };
-
-  let activity_style_normal_mode={
-    "background":"#F1F1F1",
-    "color": "black"
-  };
 
 
   return (
@@ -131,14 +91,8 @@ function App() {
           <div className="App-activities-outer-div">
             {
               activities.map(activityObj=>{
-                return <div style={ darkMode ? activity_style_dark_mode : activity_style_normal_mode} className="App-activities">
-                         <div>
-                          {activityObj.activityName}
-                         </div>
-                         <div id="App-activity-duration">
-                            { calculateDuration(activityObj.timeStamp) }
-                         </div>
-                        
+                return <div key={activityObj.id} className="App-activities">
+                         <Activity data={activityObj} dark_mode={darkMode}/>
                        </div>
               })
 

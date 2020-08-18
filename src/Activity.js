@@ -1,13 +1,16 @@
 import React,{useState,useEffect} from 'react';
 import './App.css';
 import './Activity.css';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 
-// import db from './firebase.js';
+
+import db from './firebase.js';
 
 
 
 function Activity(props) {
+  // debugger;
 
   const [activityClicked,setActivtyClicked] = useState(false);
 
@@ -50,62 +53,44 @@ function Activity(props) {
 
   }
 
+  const activityCompletionHandler=()=>{
+
+       if(props.data.activityDone)
+        db.collection("activityCollectionTest").doc(props.data.id).update({activityDone:false});
+       else
+        db.collection("activityCollectionTest").doc(props.data.id).update({activityDone:true});
+
+  }
+
   
+  let activity_style_dark_mode={
+    "background":"#0F171E",
+    "color": "white"
+  };
 
-  window.onclick = function(event) {
-    let modal = document.getElementById("myModal");
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
+  let activity_style_normal_mode={
+    "background":"#F1F1F1",
+    "color": "black"
+  };
 
-  const modalOpen = ()=>{
-
-    // debugger;
-    let modal=document.getElementById("myModal");
-    modal.style.display = "block";
-  }
-
-  const rememberMe = ()=>{
-    let duration = document.getElementById("remember-me-time").value;
-    if(duration === "")
-      duration=5;
-    else
-      duration=Number(duration);
-
-    setTimeout(function(){
-      alert("hey");
-    },duration*1000*60);
-
-     let modal = document.getElementById("myModal");
-     modal.style.display = "none";
-
-  }
+  // let black
 
   return (
       <div className="Activity-activity">
 
-          <div onClick={modalOpen} className="Activity-activity-data">
+          <div style={ props.dark_mode ? activity_style_dark_mode : activity_style_normal_mode} className="Activity-activity-data">
              <div>
-              {props.activityName}
+              {props.data.activityName}
              </div>
              <div id="App-activity-duration">
-                { calculateDuration(props.activtyTimestamp) }
+                { calculateDuration(props.data.timeStamp) }
              </div>
          </div>
-
-         {
-
-          <div id="myModal" className="modal">
-              <div id="modal-content-id" className="modal-content">
-                <p>Remember me in <input id="remember-me-time" placeholder="5" type="text"/>minutes</p><button onClick={rememberMe}>Go</button>
-              </div>
-          </div>
-         }
+         <div>
+            <CheckCircleIcon onClick={activityCompletionHandler} style={props.data.activityDone ? { color: "green" } : (props.dark_mode ? {color: "white"} : {color:"black"})}/>
+         </div>
 
       </div>
-
-
 
   );
   
