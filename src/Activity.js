@@ -104,7 +104,8 @@ function Activity(props) {
   const activityRevisitHandler=()=>{
 
     let revisited_activity = db_collection.doc(props.data.id)
-    db_collection.add({timeStamp: new Date(),revisitedActivity: revisited_activity});
+    debugger;
+    db_collection.add({activityName: props.data.activityName ,timeStamp: new Date(),revisitedActivity: revisited_activity});
 
 
   }
@@ -199,16 +200,7 @@ function Activity(props) {
   }
 
 
-  useEffect(()=>{
-    if(props.data.revisitedActivity){
-    // debugger;
-      // console.log(revisitedActivity);
-      props.data.revisitedActivity.get().then(snapshot=>{
-        setRevisitedActivity(snapshot.data());
-      });
-    }
-
-  },[]);
+  
   
 
   return (
@@ -218,7 +210,7 @@ function Activity(props) {
           </div>
           <div onClick={(e)=>{revisitTransitionHandler(e)}} style={activityStyle} className="Activity-activity-data">
              <div id="Activity-activity-name">
-              {props.data.activityName || "REVISIT @ "+revisitedActivity.activityName}
+              {props.data.revisitedActivity ? "Revist @ "+props.data.activityName : props.data.activityName}
              </div>
              <div id="App-activity-duration">
                 { calculateDuration(props.data.timeStamp) }
