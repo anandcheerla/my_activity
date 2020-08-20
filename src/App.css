@@ -36,3 +36,9 @@
 
 }
 
+#Activity-activity-features{
+  display: flex;
+  flex-direction: column;
+  opacity: 0.9;
+}
+
