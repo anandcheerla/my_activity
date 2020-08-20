@@ -63,7 +63,29 @@ function Activity(props) {
 
   }
 
+  var i=0;
+  const recursiveRevisitedActivitiesCompletion=(node)=>{
 
+    if(node){
+        // console.log("coming");
+        // debugger;
+         
+         node.get().then(doc=>{
+            // debugger;
+            if(!doc.data().activityDone)
+            {  
+              // debugger;
+              node.update({activityDone: true});
+              // console.log(i++);
+              // console.log(doc.data().revisitedActivity);
+              recursiveRevisitedActivitiesCompletion(doc.data().revisitedActivity)
+            }
+        });
+    }
+
+    return;
+
+  }
 
   const activityCompletionHandler=()=>{
 
@@ -71,6 +93,10 @@ function Activity(props) {
         db_collection.doc(props.data.id).update({activityDone:false});
        else
         db_collection.doc(props.data.id).update({activityDone:true});
+
+      if(props.data.revisitedActivity && !props.data.activityDone){
+        recursiveRevisitedActivitiesCompletion(props.data.revisitedActivity);
+      }
 
   }
 
@@ -102,7 +128,7 @@ function Activity(props) {
             }
             else{
               setRevisitedActivityClicked(true);
-              ele.scrollIntoView({block: "center"});
+              ele.scrollIntoView({behavior: "smooth",block: "center"});
               ele.style.marginLeft = "30px";
               // let direction_icon = <DirectionsIcon/>;
               // ele.childNodes[0].appendChild(direction_icon);
@@ -172,6 +198,19 @@ function Activity(props) {
     activityStyle.opacity = "0.4";
   }
 
+
+  useEffect(()=>{
+    if(props.data.revisitedActivity){
+    // debugger;
+      // console.log(revisitedActivity);
+      props.data.revisitedActivity.get().then(snapshot=>{
+        setRevisitedActivity(snapshot.data());
+      });
+    }
+
+  },[]);
+  
+
   return (
       <div onMouseEnter={()=>setShowActivityInfo(true)} onMouseLeave={()=>setShowActivityInfo(false)} className="Activity-activity">
           <div id="Activity-direction-icon">
@@ -179,7 +218,7 @@ function Activity(props) {
           </div>
           <div onClick={(e)=>{revisitTransitionHandler(e)}} style={activityStyle} className="Activity-activity-data">
              <div id="Activity-activity-name">
-              {props.data.activityName || "--Revisit--"}
+              {props.data.activityName || "REVISIT @ "+revisitedActivity.activityName}
              </div>
              <div id="App-activity-duration">
                 { calculateDuration(props.data.timeStamp) }
