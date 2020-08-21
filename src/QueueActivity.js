@@ -69,6 +69,7 @@ function QueueActivity(props) {
       timeStamp: new Date(),
       activityDone: false
     });
+    db_queue_collection.doc(props.data.id).delete();
 
   }
 
@@ -125,8 +126,8 @@ function QueueActivity(props) {
           )
           &&
          <div>
-            <DeleteIcon style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={deleteActivityHandler}/>
-            <AddCircleOutlineIcon style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={addActivityToMainActivitiesHandler}/>
+            <DeleteIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={deleteActivityHandler}/>
+            <AddCircleOutlineIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={addActivityToMainActivitiesHandler}/>
          </div>
 
          }

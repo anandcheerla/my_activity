@@ -42,3 +42,12 @@
   opacity: 0.9;
 }
 
+button:hover{ 
+  cursor: pointer;
+}
+
+
+.ui-icons:hover{
+  cursor: pointer;
+}
+

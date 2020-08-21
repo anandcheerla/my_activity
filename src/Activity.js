@@ -225,15 +225,15 @@ function Activity(props) {
           &&
          <div id="Activity-activity-features">
             <div>
-              <CheckCircleIcon onClick={activityCompletionHandler} style={(props.data.activityDone) ? { color: "green" } : (props.dark_mode ? {color: "white"} : {color:"black"})}/>
+              <CheckCircleIcon className="ui-icons" onClick={activityCompletionHandler} style={(props.data.activityDone) ? { color: "green" } : (props.dark_mode ? {color: "white"} : {color:"black"})}/>
             </div>
             <div>
               {
                 revisitedActivityClicked
                 ?
-                <PauseCircleFilledIcon style={props.dark_mode ? {color: "white"} : {color:"black"}}/>
+                <PauseCircleFilledIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}}/>
                 :
-                <PlayCircleFilledIcon style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={activityRevisitHandler}/>
+                <PlayCircleFilledIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={activityRevisitHandler}/>
               }
             </div>
          </div>
@@ -242,7 +242,7 @@ function Activity(props) {
           showActivityInfo
           &&
          <div>
-            <CancelIcon style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={dismissActivityHandler}/>
+            <CancelIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={dismissActivityHandler}/>
          </div>
          }
          {
@@ -254,8 +254,8 @@ function Activity(props) {
           )
           &&
          <div>
-            <DeleteIcon style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={deleteActivityHandler}/>
-            <AddBoxIcon style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={addToQueueHandler}/>
+            <DeleteIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={deleteActivityHandler}/>
+            <AddBoxIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={addToQueueHandler}/>
          </div>
 
          }
