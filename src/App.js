@@ -15,6 +15,7 @@ function App() {
   const [activities,setActivities] = useState([]);
   const [loggedIn,setLoggedIn] = useState(false);
   const [darkMode,setDarkMode] = useState(false);
+  const [devMode,setDevMode] = useState(true);
 
 
   // debugger;
@@ -86,6 +87,18 @@ function App() {
 
  }
 
+ const chooseDevMode=(e)=>{
+    e.preventDefault();
+
+
+    if(devMode)
+       setDevMode(false)
+     else
+      setDevMode(true) 
+
+
+ }
+
 
  // console.log("one");
 
@@ -101,6 +114,8 @@ function App() {
   </div>
   <div>
   <button id="App-dark-mode-button" onClick={chooseTheme}>Dark mode</button>
+  <button id="App-dev-mode-button" onClick={chooseDevMode}>Dev mode</button>
+
   </div>
   </form>
   </div>
@@ -112,7 +127,7 @@ function App() {
     {
       activities.map(activityObj=>{
         return <div key={activityObj.id} keyprop={activityObj.id} className="App-activities">
-        <Activity data={activityObj} dark_mode={darkMode}/>
+        <Activity data={activityObj} dark_mode={darkMode} dev_mode={devMode}/>
         </div>
       })
 

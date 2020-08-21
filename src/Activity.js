@@ -7,6 +7,7 @@ import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import CancelIcon from '@material-ui/icons/Cancel';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 
 
@@ -156,6 +157,12 @@ function Activity(props) {
 
   }
 
+  const deleteActivityHandler = ()=>{
+
+    if(window.confirm("Are you sure?"))
+      db_collection.doc(props.data.id).delete();
+  }
+
 
   
   let activity_style_dark_mode={
@@ -240,6 +247,19 @@ function Activity(props) {
          <div>
             <CancelIcon style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={dismissActivityHandler}/>
          </div>
+         }
+         {
+          
+          (
+          showActivityInfo
+          &&
+          props.dev_mode
+          )
+          &&
+         <div>
+            <DeleteIcon style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={deleteActivityHandler}/>
+         </div>
+
          }
 
       </div>
