@@ -1,13 +1,13 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState} from 'react';
 import './App.css';
 import './Activity.css';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import CancelIcon from '@material-ui/icons/Cancel';
 import DeleteIcon from '@material-ui/icons/Delete';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 
 
 
@@ -24,6 +24,9 @@ function Activity(props) {
   const [showActivityInfo,setShowActivityInfo] = useState(false);
 
   const db_collection = db.collection("activityCollection_1");
+  const db_queue_collection = db.collection("activityQueueCollection_1");
+
+
 
   const calculateDuration = (time_lv)=>{ 
 
@@ -105,7 +108,7 @@ function Activity(props) {
   const activityRevisitHandler=()=>{
 
     let revisited_activity = db_collection.doc(props.data.id)
-    debugger;
+    // debugger;
     db_collection.add({activityName: props.data.activityName ,timeStamp: new Date(),revisitedActivity: revisited_activity});
 
 
@@ -132,8 +135,7 @@ function Activity(props) {
               setRevisitedActivityClicked(true);
               ele.scrollIntoView({behavior: "smooth",block: "center"});
               ele.style.marginLeft = "30px";
-              // let direction_icon = <DirectionsIcon/>;
-              // ele.childNodes[0].appendChild(direction_icon);
+             
 
             }
 
@@ -144,6 +146,14 @@ function Activity(props) {
       });
     }
 
+
+  }
+
+  const addToQueueHandler = ()=>{
+
+      db_queue_collection.add(props.data);
+
+      db_collection.doc(props.data.id).delete();
 
   }
 
@@ -175,19 +185,6 @@ function Activity(props) {
     "color": "black"
   };
 
-
-
-  // if(props.data.revisitedActivity){
-  //     props.data.revisitedActivity.get().then((doc)=>{
-  //       setRevisitedActivity({...doc.data()});
-  //     });
-  // }
-  
-  // if(props.data.cantResolve)
-  // {
-  //   console.log("akc");
-  //   console.log(props.data.id);
-  // }
 
   let activityStyle = {
     
@@ -258,6 +255,7 @@ function Activity(props) {
           &&
          <div>
             <DeleteIcon style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={deleteActivityHandler}/>
+            <AddBoxIcon style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={addToQueueHandler}/>
          </div>
 
          }
