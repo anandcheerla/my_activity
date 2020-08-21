@@ -127,10 +127,20 @@ function QueueActivity(props) {
           &&
          <div>
             <DeleteIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={deleteActivityHandler}/>
+         </div>
+
+         }
+
+          {
+          showActivityInfo
+          &&
+         <div>
             <AddCircleOutlineIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={addActivityToMainActivitiesHandler}/>
          </div>
 
          }
+
+
 
       </div>
 
