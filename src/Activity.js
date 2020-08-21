@@ -112,6 +112,11 @@ function Activity(props) {
     db_collection.add({activityName: props.data.activityName ,timeStamp: new Date(),revisitedActivity: revisited_activity});
 
 
+    let activities = document.getElementsByClassName("App-activities");
+    if(activities.length>0){
+      activities[activities.length-1].scrollIntoView({behavior: "smooth",block: "center"});      
+    }
+
   }
 
   const revisitTransitionHandler=(e)=>{
