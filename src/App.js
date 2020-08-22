@@ -64,7 +64,8 @@ function App() {
     db_collection.add({
       activityName: text.value,
       timeStamp: new Date(),
-      activityDone:{activityDoneStatus:false,timeStamp:new Date()}
+      activityDone:{activityDoneStatus:false,timeStamp:new Date(),
+      isComment: false}
     });
     // setActivities([...activities,text.value]);
     text.value='';

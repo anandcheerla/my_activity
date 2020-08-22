@@ -3,6 +3,8 @@ import './App.css';
 import './Activity.css';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import Tooltip from '@material-ui/core/Tooltip'; 
+
 
 import {db} from './firebase.js';
 
@@ -67,7 +69,8 @@ function QueueActivity(props) {
     db_collection.add({
       activityName: props.data.activityName,
       timeStamp: new Date(),
-      activityDone: props.data.activityDone
+      activityDone: props.data.activityDone || false,
+      isComment: props.data.isComment || false
     });
     db_queue_collection.doc(props.data.id).delete();
 
@@ -126,7 +129,9 @@ function QueueActivity(props) {
           )
           &&
          <div>
-            <DeleteIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={deleteActivityHandler}/>
+            <Tooltip title="Delete">
+              <DeleteIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={deleteActivityHandler}/>
+            </Tooltip>
          </div>
 
          }
@@ -135,7 +140,9 @@ function QueueActivity(props) {
           showActivityInfo
           &&
          <div>
-            <AddCircleOutlineIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={addActivityToMainActivitiesHandler}/>
+            <Tooltip title="Add to Main">
+              <AddCircleOutlineIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={addActivityToMainActivitiesHandler}/>
+            </Tooltip>
          </div>
 
          }

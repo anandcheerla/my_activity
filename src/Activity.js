@@ -8,6 +8,9 @@ import DirectionsIcon from '@material-ui/icons/Directions';
 import CancelIcon from '@material-ui/icons/Cancel';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddBoxIcon from '@material-ui/icons/AddBox';
+import InsertCommentIcon from '@material-ui/icons/InsertComment';
+import SpeakerNotesOffIcon from '@material-ui/icons/SpeakerNotesOff';   //using this as an uncomment
+import Tooltip from '@material-ui/core/Tooltip'; 
 
 import firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -28,10 +31,11 @@ function Activity(props) {
   const db_queue_collection = db.collection("activityQueueCollection_1");
 
 
-  useEffect(()=>{
-    // a.update({activityDone:{activityDoneStatus:false,timeStamp:new Date()}});
-    // let a=db.collection("activityCollection_1").doc(props.data.id);
-  },[]);
+  // useEffect(()=>{
+  //   // a.update({activityDone:{activityDoneStatus:false,timeStamp:new Date()}});
+  //   // let a=db.collection("activityCollection_1").doc(props.data.id);
+  //   console.log(props.data.id);
+  // },[]);
 
   const calculateDurationCurTimeAndCreatedTime = (time_lv)=>{ 
 
@@ -132,7 +136,7 @@ function Activity(props) {
 
     let revisited_activity = db_collection.doc(props.data.id)
     // debugger;
-    db_collection.add({activityName: props.data.activityName ,timeStamp: new Date(),revisitedActivity: revisited_activity});
+    db_collection.add({activityName: props.data.activityName ,timeStamp: new Date(), activityDone:{activityDoneStatus:false,timeStamp:new Date()},isComment:props.data.isComment || false,revisitedActivity: revisited_activity});
 
 
     let activities = document.getElementsByClassName("App-activities");
@@ -191,12 +195,20 @@ function Activity(props) {
   //doesnot provide any semantic meaning 
   const dismissActivityHandler=()=>{
     let dismissing_doc = db_collection.doc(props.data.id);
-    console.log(props.data.activityDone.activityDoneStatus);
     if(props.data.cantResolve)
       dismissing_doc.update({cantResolve: false});
     else
       dismissing_doc.update({cantResolve: true});
 
+
+  }
+
+  const ToggleCommentHandler=()=>{
+    let commenting_doc = db_collection.doc(props.data.id);
+    if(props.data.isComment)
+      commenting_doc.update({isComment: false});
+    else
+      commenting_doc.update({isComment: true});
 
   }
 
@@ -238,7 +250,14 @@ function Activity(props) {
 
 
   
-  
+  // return (
+  //   <div>
+  //         {props.data.activityName}
+  //         <Tooltip title="Delete">
+  //             <DeleteIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={deleteActivityHandler}/>
+  //           </Tooltip>
+  //     </div>
+  //   );
 
   return (
       <div onMouseEnter={()=>setShowActivityInfo(true)} onMouseLeave={()=>setShowActivityInfo(false)} className="Activity-activity">
@@ -250,11 +269,22 @@ function Activity(props) {
               {props.data.revisitedActivity ? "Revist @ "+props.data.activityName : props.data.activityName}
              </div>
              <div id="App-activity-time-info">
-               <div id="App-activity-creation-time">
-                  { calculateDurationCurTimeAndCreatedTime(props.data.timeStamp)}
+               <div id="App-activity-creation-time-plus-comment">
+                  <div>
+                    { calculateDurationCurTimeAndCreatedTime(props.data.timeStamp)}
+                  </div>
+                  <div>
+                    {
+                    props.data.isComment
+                    &&
+                    <InsertCommentIcon style={props.dark_mode ? {color: "white"} : {color:"black"}}/>
+                    }
+                  </div>
                </div>
                {
-                props.data.activityDone.activityDoneStatus
+                (!props.data.isComment 
+                && 
+                props.data.activityDone.activityDoneStatus)
                 &&
                <div id="App-activity-duration-time">
                   took { calculateDurationCreatedTimeAndDoneTime(props.data.timeStamp,props.data.activityDone.timeStamp)} to finish
@@ -267,16 +297,26 @@ function Activity(props) {
           showActivityInfo
           &&
          <div id="Activity-activity-features">
+            {
+             !props.data.isComment
+             &&
             <div>
-              <CheckCircleIcon className="ui-icons" onClick={activityCompletionHandler} style={(props.data.activityDone.activityDoneStatus) ? { color: "green" } : (props.dark_mode ? {color: "white"} : {color:"black"})}/>
+              <Tooltip title="Done">
+                <CheckCircleIcon className="ui-icons" onClick={activityCompletionHandler} style={(props.data.activityDone.activityDoneStatus) ? { color: "green" } : (props.dark_mode ? {color: "white"} : {color:"black"})}/>
+              </Tooltip>
             </div>
+            }
             <div>
               {
                 revisitedActivityClicked
                 ?
-                <PauseCircleFilledIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}}/>
+                <Tooltip title="Revisiting">
+                  <PauseCircleFilledIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}}/>
+                </Tooltip>
                 :
-                <PlayCircleFilledIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={activityRevisitHandler}/>
+                <Tooltip title="Revisit">
+                  <PlayCircleFilledIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={activityRevisitHandler}/>
+                </Tooltip>
               }
             </div>
          </div>
@@ -285,9 +325,30 @@ function Activity(props) {
           showActivityInfo
           &&
          <div>
+            <Tooltip title="Dismiss">
             <CancelIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={dismissActivityHandler}/>
+            </Tooltip>
          </div>
          }
+
+          {
+          showActivityInfo
+          &&
+         <div>
+            {
+            props.data.isComment
+            ?
+            <Tooltip title="Uncomment">
+              <SpeakerNotesOffIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={ToggleCommentHandler}/>
+            </Tooltip>
+            :
+            <Tooltip title="Comment">
+              <InsertCommentIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={ToggleCommentHandler}/>
+            </Tooltip>
+            }
+         </div>
+         }
+
          {
           
           (
@@ -297,8 +358,12 @@ function Activity(props) {
           )
           &&
          <div>
-            <DeleteIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={deleteActivityHandler}/>
-            <AddBoxIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={addToQueueHandler}/>
+            <Tooltip title="Delete">
+              <DeleteIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={deleteActivityHandler}/>
+            </Tooltip>
+            <Tooltip title="Add to Queue">
+              <AddBoxIcon className="ui-icons" style={props.dark_mode ? {color: "white"} : {color:"black"}} onClick={addToQueueHandler}/>
+            </Tooltip>
          </div>
 
          }

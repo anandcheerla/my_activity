@@ -36,6 +36,11 @@
 
 }
 
+#App-activity-creation-time-plus-comment{
+    display: flex;
+    justify-content: space-between;
+}
+
 #App-activity-time-info{
   display: flex;
   flex-direction: column;
