@@ -78,7 +78,7 @@ function App() {
   const chooseTheme = (e)=>{
     e.preventDefault();
 
-    if(e.target.innerHTML==="Dark mode"){
+    if(e.target.innerHTML==="Dark Mode"){
       document.getElementsByTagName("body")[0].style.background = "#212121";
       document.getElementById("App-activity-input").style.background = "grey";
       document.getElementById("App-activity-input").style.borderRadius = "5px";
@@ -90,7 +90,7 @@ function App() {
      document.getElementById("App-activity-input").style.background = "none";
      document.getElementById("App-activity-input").style.borderRadius = "none";
      setDarkMode(false);
-     e.target.innerHTML="Dark mode";
+     e.target.innerHTML="Dark Mode";
    }
 
  }
@@ -98,11 +98,16 @@ function App() {
  const chooseDevMode=(e)=>{
     e.preventDefault();
 
+    if(devMode){
+       
+       setDevMode(false);
+       e.target.innerText = "Dev Mode"
+     }
+    else{
+       setDevMode(true);
+       e.target.innerText = "Normal Mode"
 
-    if(devMode)
-       setDevMode(false)
-    else
-       setDevMode(true) 
+     }
 
 
  }
@@ -112,10 +117,14 @@ function App() {
     e.preventDefault();
 
 
-    if(queueMode)
-       setQueueMode(false)
-    else
-       setQueueMode(true) 
+    if(queueMode){
+       setQueueMode(false);
+       e.target.innerText = "Queue";
+     }
+    else{ 
+      setQueueMode(true);
+      e.target.innerText = "Main";
+    }
 
  }
 
@@ -158,8 +167,8 @@ function App() {
   </Button>
   </div>
   <div>
-  <button id="App-dark-mode-button" onClick={chooseTheme}>Dark mode</button>
-  <button id="App-dev-mode-button" onClick={chooseDevMode}>Dev mode</button>
+  <button id="App-dark-mode-button" onClick={chooseTheme}>Dark Mode</button>
+  <button id="App-dev-mode-button" onClick={chooseDevMode}>Dev Mode</button>
   <button id="App-queue-button" onClick={chooseQueueMode}>Queue</button>
 
 

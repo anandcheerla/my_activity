@@ -298,7 +298,11 @@ function Activity(props) {
           &&
          <div id="Activity-activity-features">
             {
+             (
              !props.data.isComment
+             &&
+             !props.data.cantResolve
+             )
              &&
             <div>
               <Tooltip title="Done">
