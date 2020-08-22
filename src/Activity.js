@@ -175,7 +175,12 @@ function Activity(props) {
   //doesnot provide any semantic meaning 
   const dismissActivityHandler=()=>{
     let dismissing_doc = db_collection.doc(props.data.id);
-    dismissing_doc.update({cantResolve: true});
+    console.log(props.data.activityDone.activityDoneStatus);
+    if(props.data.cantResolve)
+      dismissing_doc.update({cantResolve: false});
+    else
+      dismissing_doc.update({cantResolve: true});
+
 
   }
 
@@ -212,7 +217,7 @@ function Activity(props) {
   }
 
   if(props.data.cantResolve){
-    activityStyle.opacity = "0.4";
+    activityStyle.opacity = "0.6";
   }
 
 
