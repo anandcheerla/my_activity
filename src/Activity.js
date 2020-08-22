@@ -33,7 +33,7 @@ function Activity(props) {
     // let a=db.collection("activityCollection_1").doc(props.data.id);
   },[]);
 
-  const calculateDuration = (time_lv)=>{ 
+  const calculateDurationCurTimeAndCreatedTime = (time_lv)=>{ 
 
     let currentTs = new Date();
     let activityTs = time_lv.toDate();
@@ -70,6 +70,22 @@ function Activity(props) {
 
 
 
+  }
+
+  const calculateDurationCreatedTimeAndDoneTime = (startTime,endTime)=>{
+
+    let diff=endTime.toDate()-startTime.toDate();;
+    let minutes=diff/(1000*60);
+
+
+    let duration;
+    let hours=Math.floor(minutes/60);
+    let days=Math.floor(minutes/(60*24));
+    minutes=Math.ceil(minutes%60);
+
+    duration=(days!=0 ? (days+(days>1?" days":" day")+" "):"")+(hours!=0 ? (hours+(hours>1?" hours":" hour")+" "):"")+minutes+(minutes>1?" min":" min");
+    return duration;
+      
   }
 
 
@@ -233,9 +249,19 @@ function Activity(props) {
              <div id="Activity-activity-name">
               {props.data.revisitedActivity ? "Revist @ "+props.data.activityName : props.data.activityName}
              </div>
-             <div id="App-activity-duration">
-                { calculateDuration(props.data.timeStamp) }
-             </div>
+             <div id="App-activity-time-info">
+               <div id="App-activity-creation-time">
+                  { calculateDurationCurTimeAndCreatedTime(props.data.timeStamp)}
+               </div>
+               {
+                props.data.activityDone.activityDoneStatus
+                &&
+               <div id="App-activity-duration-time">
+                  took { calculateDurationCreatedTimeAndDoneTime(props.data.timeStamp,props.data.activityDone.timeStamp)} to finish
+               </div>   
+               }       
+             </div>   
+
          </div>
          {
           showActivityInfo

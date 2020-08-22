@@ -112,7 +112,7 @@ function QueueActivity(props) {
              <div id="Activity-activity-name">
               {props.data.activityName}
              </div>
-             <div id="App-activity-duration">
+             <div id="App-activity-creation-time">
                 { calculateDuration(props.data.timeStamp) }
              </div>
          </div>

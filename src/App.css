@@ -36,6 +36,11 @@
 
 }
 
+#App-activity-time-info{
+  display: flex;
+  flex-direction: column;
+}
+
 #Activity-activity-features{
   display: flex;
   flex-direction: column;
