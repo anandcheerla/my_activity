@@ -4,7 +4,7 @@ import './Activity.css';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
-import db from './firebase.js';
+import {db} from './firebase.js';
 
 
 function QueueActivity(props) {
@@ -67,7 +67,7 @@ function QueueActivity(props) {
     db_collection.add({
       activityName: props.data.activityName,
       timeStamp: new Date(),
-      activityDone: false
+      activityDone: props.data.activityDone
     });
     db_queue_collection.doc(props.data.id).delete();
 

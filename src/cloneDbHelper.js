@@ -1,4 +1,4 @@
-import db from './firebase.js';
+import {db} from './firebase.js';
 import ls from 'local-storage';
 
 function sleep(ms) {

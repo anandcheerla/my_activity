@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import './App.css';
 import './Activity.css';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -9,9 +9,10 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 
-
-import db from './firebase.js';
+import {db,fireBaseApp} from './firebase.js';
 
 
 
@@ -27,6 +28,10 @@ function Activity(props) {
   const db_queue_collection = db.collection("activityQueueCollection_1");
 
 
+  useEffect(()=>{
+    // a.update({activityDone:{activityDoneStatus:false,timeStamp:new Date()}});
+    // let a=db.collection("activityCollection_1").doc(props.data.id);
+  },[]);
 
   const calculateDuration = (time_lv)=>{ 
 
@@ -67,6 +72,8 @@ function Activity(props) {
 
   }
 
+
+
   var i=0;
   const recursiveRevisitedActivitiesCompletion=(node)=>{
 
@@ -76,10 +83,10 @@ function Activity(props) {
          
          node.get().then(doc=>{
             // debugger;
-            if(!doc.data().activityDone)
+            if(!doc.data().activityDone.activityDoneStatus)
             {  
               // debugger;
-              node.update({activityDone: true});
+              node.update({activityDone:{activityDoneStatus:true,timeStamp:new Date()}});
               // console.log(i++);
               // console.log(doc.data().revisitedActivity);
               recursiveRevisitedActivitiesCompletion(doc.data().revisitedActivity)
@@ -93,12 +100,12 @@ function Activity(props) {
 
   const activityCompletionHandler=()=>{
 
-       if(props.data.activityDone)
-        db_collection.doc(props.data.id).update({activityDone:false});
+       if(props.data.activityDone.activityDoneStatus)
+        db_collection.doc(props.data.id).update({activityDone:{activityDoneStatus:false,timeStamp:new Date()}});
        else
-        db_collection.doc(props.data.id).update({activityDone:true});
+        db_collection.doc(props.data.id).update({activityDone:{activityDoneStatus:true,timeStamp:new Date()}});
 
-      if(props.data.revisitedActivity && !props.data.activityDone){
+      if(props.data.revisitedActivity && !props.data.activityDone.activityDoneStatus){
         recursiveRevisitedActivitiesCompletion(props.data.revisitedActivity);
       }
 
@@ -230,7 +237,7 @@ function Activity(props) {
           &&
          <div id="Activity-activity-features">
             <div>
-              <CheckCircleIcon className="ui-icons" onClick={activityCompletionHandler} style={(props.data.activityDone) ? { color: "green" } : (props.dark_mode ? {color: "white"} : {color:"black"})}/>
+              <CheckCircleIcon className="ui-icons" onClick={activityCompletionHandler} style={(props.data.activityDone.activityDoneStatus) ? { color: "green" } : (props.dark_mode ? {color: "white"} : {color:"black"})}/>
             </div>
             <div>
               {

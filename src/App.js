@@ -8,7 +8,7 @@ import {cloneDbHelper,cloneDbHelper2,updateCollection} from './cloneDbHelper.js'
 import ls from 'local-storage';
 
 
-import db from './firebase.js';
+import {db} from './firebase.js';
 
 
 function App() {
@@ -29,6 +29,7 @@ function App() {
 
     db_collection.orderBy('timeStamp','asc').onSnapshot(snapshot=>{
       setActivities(snapshot.docs.map(doc=>{
+        // debugger;
         let obj=doc.data();
         obj.id=doc.id;
         return obj;
@@ -63,7 +64,7 @@ function App() {
     db_collection.add({
       activityName: text.value,
       timeStamp: new Date(),
-      activityDone: false
+      activityDone:{activityDoneStatus:false,timeStamp:new Date()}
     });
     // setActivities([...activities,text.value]);
     text.value='';
@@ -133,7 +134,8 @@ function App() {
     db_queue_collection.add({
       activityName: text.value,
       timeStamp: new Date(),
-      activityDone: false
+      activityDone:{activityDoneStatus:false,timeStamp:new Date()}
+
     });
    
     text.value='';
