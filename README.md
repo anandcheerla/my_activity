@@ -31,11 +31,11 @@ Dark mode reduces strain on eyes.
 
 ## Functionality/Rules
 
-commented activity cannot have completion status as the main purpose of comment/note is just for reference.
-Last Nested revisit completion makes all the nested revisits complete,where as vice versa is not possible.
-Dismissed activity also doesnot have completion status as the main purpose of creating dismissed activity is for unresolved tasks
-Clicking on revisited Activity brings you to the immediate revisit activity/normal activity on which revisit is created.
-Revisited Activities start with "Revisit @" and the play icon gets paused when you click on the activity,which indicates the revisiting is happening currently.Click again to get back to the normal mode
+#### commented activity cannot have completion status as the main purpose of comment/note is just for reference.
+#### Last Nested revisit completion makes all the nested revisits complete,where as vice versa is not possible.
+#### Dismissed activity also doesnot have completion status as the main purpose of creating dismissed activity is for unresolved tasks
+#### Clicking on revisited Activity brings you to the immediate revisit activity/normal activity on which revisit is created.
+#### Revisited Activities start with "Revisit @" and the play icon gets paused when you click on the activity,which indicates the revisiting is happening currently.Click again to get back to the normal mode
 
 
 
