@@ -11,7 +11,7 @@ We can keep track of every activity in a most efficient way with easy to use int
 Creating an activity is very easy,just like sending a simple message, Real time sync between different devices.
 
 ### Revisit Activity
-you can even revist activity that was in progess in the past by clicking the play icon.It will create a revisit activity in the current time which points to the revisited past activity.
+You can even revist activity that was in progess in the past by clicking the play icon.It will create a revisit activity in the current time which points to the revisited past activity.
 
 ### Completion Status
 You can even save,when a particular activity is done by clicking on the tick icon.It is a toggle icon.
@@ -31,7 +31,7 @@ Dark mode reduces strain on eyes.
 
 ## Functionality/Rules
 
-#### commented activity cannot have completion status as the main purpose of comment/note is just for reference.
+#### Commented activity cannot have completion status as the main purpose of comment/note is just for reference.
 #### Last Nested revisit completion makes all the nested revisits complete,where as vice versa is not possible.
 #### Dismissed activity also doesnot have completion status as the main purpose of creating dismissed activity is for unresolved tasks
 #### Clicking on revisited Activity brings you to the immediate revisit activity/normal activity on which revisit is created.
