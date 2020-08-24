@@ -1,68 +1,43 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Advanced Activity Tracker
 
-In the project directory, you can run:
+We can keep track of every activity in a most efficient way with easy to use interface.
 
-### `npm start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Features
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Activity Creation
+Creating an activity is very easy,just like sending a simple message, Real time sync between different devices.
 
-### `npm test`
+### Revisit Activity
+You can even revist activity that was in progess in the past by clicking the play icon.It will create a revisit activity in the current time which points to the revisited past activity.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Completion Status
+You can even save,when a particular activity is done by clicking on the tick icon.It is a toggle icon.
+It even has the Recursive completion functionality for the nested revisits.
 
-### `npm run build`
+### Dismiss activity
+Sometimes you start an activity but it is not done or not happened at all due to some reasons.For Example,some timed events cannot be revisited,it can be dismissed by clicking the cross icon.The best thing is that the activity wont disappear.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Queue
+There is also a queue tab,where you can keep the things/activities that comes to your mind,but you are not doing it at that point in time.Those can be created in queue tab and you can move/add them to the main activity tab whenever you are pursuing them.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### Comment/Note
+You can even turn the activity into comment/note instead of a timed activity.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Dark Mode
+Dark mode reduces strain on eyes.
 
-### `npm run eject`
+## Functionality/Rules
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### Commented activity cannot have completion status as the main purpose of comment/note is just for reference.
+#### Last Nested revisit completion makes all the nested revisits complete,where as vice versa is not possible.
+#### Dismissed activity also doesnot have completion status as the main purpose of creating dismissed activity is for unresolved tasks
+#### Clicking on revisited Activity brings you to the immediate revisit activity/normal activity on which revisit is created.
+#### Revisited Activities start with "Revisit @" and the play icon gets paused when you click on the activity,which indicates the revisiting is happening currently.Click again to get back to the normal mode
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
