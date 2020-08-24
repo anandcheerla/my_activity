@@ -1,6 +1,9 @@
 import React,{useState,useEffect} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import './App.css';
 import Activity from './Activity.js';
 import QueueActivity from './QueueActivity.js';
@@ -19,6 +22,7 @@ function App() {
   const [devMode,setDevMode] = useState(false);
   const [queueMode,setQueueMode] = useState(false);
   const [queueActivities,setQueueActivities] = useState([]);
+  const [commentCheckBoxChecked, setCommentCheckBoxChecked] = React.useState(true);
 
 
   const db_collection = db.collection("activityCollection_1");
@@ -61,11 +65,12 @@ function App() {
       return;
     }
 
+
     db_collection.add({
       activityName: text.value,
       timeStamp: new Date(),
-      activityDone:{activityDoneStatus:false,timeStamp:new Date(),
-      isComment: false}
+      activityDone:{activityDoneStatus:false,timeStamp:new Date()},
+      isComment: commentCheckBoxChecked
     });
     // setActivities([...activities,text.value]);
     text.value='';
@@ -128,6 +133,11 @@ function App() {
 
  }
 
+  const commentCheckBoxHandler = (event) => {
+    setCommentCheckBoxChecked(!commentCheckBoxChecked);
+  };
+
+
  const queueActivitySubmitHandler=(e)=>{
   e.preventDefault();
 
@@ -162,7 +172,17 @@ function App() {
   <form noValidate autoComplete="off">
   <div>  
   <TextField id="App-activity-input" label="Enter Activity" variant="filled" />
+  {
+  !commentCheckBoxChecked
+  ?
+  <ChatBubbleOutlineIcon style={darkMode ? {color: "white"} : {color:"black"}} onClick={commentCheckBoxHandler}/>
+  :
+  <ChatBubbleIcon style={darkMode ? {color: "white"} : {color:"black"}} onClick={commentCheckBoxHandler}/>
+  }
   <Button type="submit" onClick={(e)=>{queueMode?queueActivitySubmitHandler(e):activitySubmit(e)}} color="primary">
+
+
+
   submit
   </Button>
   </div>
