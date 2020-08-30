@@ -73,7 +73,7 @@ import SpeakerNotesOffIcon from '@material-ui/icons/SpeakerNotesOff';
 					<div>It undo the comment</div>
 				</div>
 				<div>
-					Note: When you want to go to the activity/time where it is revisiting from.Click on the revisited activity that starts with 'Revist@' takes you to the original activity.
+					Note: When you want to go to the activity/time where it is revisiting from.Clicking on the revisited activity that starts with 'Revist@' takes you to the original activity.
 				</div>
 			</div>
  		);
