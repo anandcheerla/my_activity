@@ -135,7 +135,7 @@ function Activity(props) {
 
     let revisited_activity = db_mainActivity_collection.doc(props.data.id)
     // debugger;
-    db_mainActivity_collection.add({activityName: props.data.activityName ,timeStamp: new Date(), activityDone:{activityDoneStatus:false,timeStamp:new Date()},isComment:props.data.isComment || false,revisitedActivity: revisited_activity});
+    db_mainActivity_collection.add({activityName: props.data.activityName ,timeStamp: new Date(), activityDone:{activityDoneStatus:false,timeStamp:new Date()},isComment:props.data.isComment || false,revisitedActivity: revisited_activity,username:props.user_prop.username});
 
 
     let activities = document.getElementsByClassName("App-activities");
