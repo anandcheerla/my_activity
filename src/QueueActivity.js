@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState} from 'react';
 import './App.css';
 import './Activity.css';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -16,11 +16,11 @@ function QueueActivity(props) {
   const [revisitedActivityClicked,setRevisitedActivityClicked] = useState(false);
   const [showActivityInfo,setShowActivityInfo] = useState(false);
 
-  const db_collection = db.collection("activityCollection_1");
-  const db_queue_collection = db.collection("activityQueueCollection_1");
+  const db_mainActivity_collection = db.collection("mainActivity");
 
+  const db_queueActivity_collection = db.collection("queueActivity");
 
-  const calculateDuration = (time_lv)=>{ 
+  const calculateDuration = (time_lv)=>{
 
     let currentTs = new Date();
     let activityTs = time_lv.toDate();
@@ -61,18 +61,19 @@ function QueueActivity(props) {
   const deleteActivityHandler = ()=>{
 
     if(window.confirm("Are you sure?"))
-      db_queue_collection.doc(props.data.id).delete();
+      db_queueActivity_collection.doc(props.data.id).delete();
   }
 
   const addActivityToMainActivitiesHandler = ()=>{
 
-    db_collection.add({
+    db_mainActivity_collection.add({
       activityName: props.data.activityName,
       timeStamp: new Date(),
       activityDone: props.data.activityDone || false,
-      isComment: props.data.isComment || false
+      isComment: props.data.isComment || false,
+      username: props.user_prop.username
     });
-    db_queue_collection.doc(props.data.id).delete();
+    db_queueActivity_collection.doc(props.data.id).delete();
 
   }
 

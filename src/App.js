@@ -8,6 +8,11 @@ import './App.css';
 import Activity from './Activity.js';
 import QueueActivity from './QueueActivity.js';
 import {cloneDbHelper,cloneDbHelper2,updateCollection} from './cloneDbHelper.js';
+
+import firebase from 'firebase/app';
+// import 'firebase/firestore';
+
+import {Login} from './Login.js';
 import ls from 'local-storage';
 
 
@@ -25,57 +30,83 @@ function App() {
   const [commentCheckBoxChecked, setCommentCheckBoxChecked] = React.useState(true);
 
 
-  const db_collection = db.collection("activityCollection_1");
+  const [user,setUser] = useState(null);
 
-  const db_queue_collection = db.collection("activityQueueCollection_1");
+  const db_users = db.collection("users");
 
+  const db_mainActivity_collection = db.collection("mainActivity");
+
+  const db_queueActivity_collection = db.collection("queueActivity");
+  // const currentUser = null;
+
+  
   useEffect(()=>{
 
-    db_collection.orderBy('timeStamp','asc').onSnapshot(snapshot=>{
-      setActivities(snapshot.docs.map(doc=>{
+    if(user){
+
+      db_mainActivity_collection.orderBy('timeStamp','asc').where("username","==",user.username).onSnapshot(snapshot=>{
         // debugger;
-        let obj=doc.data();
-        obj.id=doc.id;
-        return obj;
-      }));
-    });
+
+        setActivities(snapshot.docs.map((doc)=>{
+          // debugger;
+          let obj=doc.data();
+          obj.id=doc.id;
+          return obj;
+        }));
+      });
 
 
-    db_queue_collection.orderBy('timeStamp','asc').onSnapshot(snapshot=>{
-      setQueueActivities(snapshot.docs.map(doc=>{
-        let obj=doc.data();
-        obj.id=doc.id;
-        return obj;
-      }));
-    });
+      db_queueActivity_collection.orderBy('timeStamp','asc').where("username","==",user.username).onSnapshot(snapshot=>{
+        // debugger;
+        setQueueActivities(snapshot.docs.map((doc)=>{
+          let obj=doc.data();
+          obj.id=doc.id;
+          return obj;
+        }));
+      });
+
+  }
 
 
-
-  },[]);
+  },[user]);
 
   const activitySubmit = (event)=>{
     event.preventDefault();
     let text = document.getElementById("App-activity-input");
-    if(!loggedIn)
-    {
-      if(text.value==="i am akc")
-        setLoggedIn(true);
 
-      text.value='';
-      return;
-    }
-
-
-    db_collection.add({
-      activityName: text.value,
-      timeStamp: new Date(),
-      activityDone:{activityDoneStatus:false,timeStamp:new Date()},
-      isComment: commentCheckBoxChecked
-    });
+    db_mainActivity_collection.add(
+      {   
+          activityName: text.value,
+          timeStamp: new Date(),
+          activityDone:{activityDoneStatus:false,timeStamp:new Date()},
+          isComment: commentCheckBoxChecked,
+          username: user.username
+      }
+    );
     // setActivities([...activities,text.value]);
     text.value='';
 
   }
+
+  const queueActivitySubmitHandler=(e)=>{
+    e.preventDefault();
+
+    let text = document.getElementById("App-activity-input");
+    
+    db_queueActivity_collection.add(
+      {
+          activityName: text.value,
+          timeStamp: new Date(),
+          activityDone:{activityDoneStatus:false,timeStamp:new Date()},
+          username: user.username
+      }
+    );
+   
+    text.value='';
+
+
+ }
+
 
 
 
@@ -97,6 +128,26 @@ function App() {
      setDarkMode(false);
      e.target.innerHTML="Dark Mode";
    }
+
+ }
+
+ const storeUser=(user_l)=>{
+    // console.log(user_l);
+
+    db_users.where("username","==",user_l.email).get().then((res)=>{
+      if(res.docs.length==0)
+      {
+        db_users.add({username:user_l.email,timeStamp: new Date(),mainActivity:[],queueActivity:[]}).then((res)=>{
+          setUser({username: user_l.email,userId:res.id});
+        });
+
+        
+      }
+      else{
+        setUser({username: user_l.email,userId:res.docs[0].id});
+      }
+
+    });
 
  }
 
@@ -138,87 +189,63 @@ function App() {
   };
 
 
- const queueActivitySubmitHandler=(e)=>{
-  e.preventDefault();
-
-    let text = document.getElementById("App-activity-input");
-    if(!loggedIn)
-    {
-      if(text.value==="i am akc")
-        setLoggedIn(true);
-
-      text.value='';
-      return;
-    }
-
-    db_queue_collection.add({
-      activityName: text.value,
-      timeStamp: new Date(),
-      activityDone:{activityDoneStatus:false,timeStamp:new Date()}
-
-    });
-   
-    text.value='';
-
-
- }
 
 
  // console.log("one");
 
  return (
   <div className="App">
-  <div>
-  <form noValidate autoComplete="off">
-  <div>  
-  <TextField id="App-activity-input" label="Enter Activity" variant="filled" />
-  {
-  !commentCheckBoxChecked
-  ?
-  <ChatBubbleOutlineIcon style={darkMode ? {color: "white"} : {color:"black"}} onClick={commentCheckBoxHandler}/>
-  :
-  <ChatBubbleIcon style={darkMode ? {color: "white"} : {color:"black"}} onClick={commentCheckBoxHandler}/>
-  }
-  <Button type="submit" onClick={(e)=>{queueMode?queueActivitySubmitHandler(e):activitySubmit(e)}} color="primary">
+    {
+    !user?
+    <Login storeUser={(user_p)=>{storeUser(user_p)}}/>
+    :
+    <>
+    <div>
+      <form noValidate autoComplete="off">
+        <div>  
+          <TextField id="App-activity-input" label="Enter Activity" variant="filled" />
+          {
+          !commentCheckBoxChecked
+          ?
+          <ChatBubbleOutlineIcon style={darkMode ? {color: "white"} : {color:"black"}} onClick={commentCheckBoxHandler}/>
+          :
+          <ChatBubbleIcon style={darkMode ? {color: "white"} : {color:"black"}} onClick={commentCheckBoxHandler}/>
+          }
+          <Button type="submit" onClick={(e)=>{queueMode?queueActivitySubmitHandler(e):activitySubmit(e)}} color="primary">
 
 
 
-  submit
-  </Button>
-  </div>
-  <div>
-  <button id="App-dark-mode-button" onClick={chooseTheme}>Dark Mode</button>
-  <button id="App-dev-mode-button" onClick={chooseDevMode}>Dev Mode</button>
-  <button id="App-queue-button" onClick={chooseQueueMode}>Queue</button>
+          submit
+          </Button>
+        </div>
+        <div>
+          <button id="App-dark-mode-button" onClick={chooseTheme}>Dark Mode</button>
+          <button id="App-dev-mode-button" onClick={chooseDevMode}>Dev Mode</button>
+          <button id="App-queue-button" onClick={chooseQueueMode}>Queue</button>
+        </div>
+      </form>
+    </div>
 
 
-  </div>
-  </form>
-  </div>
-
-  {
-    loggedIn
-    &&
     <div className="App-activities-outer-div">
     {
-
       !queueMode
       ?
       activities.map(activityObj=>{
         return <div key={activityObj.id} keyprop={activityObj.id} className="App-activities">
-        <Activity data={activityObj} dark_mode={darkMode} dev_mode={devMode}/>
+        <Activity data={activityObj} dark_mode={darkMode} dev_mode={devMode} user_prop={user}/>
         </div>
       })
       :
       queueActivities.map(activityObj=>{
         return <div key={activityObj.id} keyprop={activityObj.id} className="App-activities">
-        <QueueActivity data={activityObj} dark_mode={darkMode} dev_mode={devMode}/>
+        <QueueActivity data={activityObj} dark_mode={darkMode} dev_mode={devMode} user_prop={user}/>
         </div>
       })
-
     }
     </div>
-  }
+    </>
+    }
 
 
   </div>

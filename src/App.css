@@ -61,3 +61,7 @@ button:hover{
   cursor: pointer;
 }
 
+
+#App-akc-footer{
+   display: flex;
+}

@@ -1,10 +1,10 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState} from 'react';
 import './App.css';
 import './Activity.css';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
-import DirectionsIcon from '@material-ui/icons/Directions';
+// import DirectionsIcon from '@material-ui/icons/Directions';
 import CancelIcon from '@material-ui/icons/Cancel';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddBoxIcon from '@material-ui/icons/AddBox';
@@ -12,10 +12,10 @@ import InsertCommentIcon from '@material-ui/icons/InsertComment';
 import SpeakerNotesOffIcon from '@material-ui/icons/SpeakerNotesOff';   //using this as an uncomment
 import Tooltip from '@material-ui/core/Tooltip'; 
 
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+// import firebase from 'firebase/app';
+// import 'firebase/firestore';
 
-import {db,fireBaseApp} from './firebase.js';
+import {db} from './firebase.js';
 
 
 
@@ -27,9 +27,10 @@ function Activity(props) {
   const [revisitedActivityClicked,setRevisitedActivityClicked] = useState(false);
   const [showActivityInfo,setShowActivityInfo] = useState(false);
 
-  const db_collection = db.collection("activityCollection_1");
-  const db_queue_collection = db.collection("activityQueueCollection_1");
 
+  const db_mainActivity_collection = db.collection("mainActivity");
+
+  const db_queueActivity_collection = db.collection("queueActivity");
 
   // useEffect(()=>{
   //   // a.update({activityDone:{activityDoneStatus:false,timeStamp:new Date()}});
@@ -81,7 +82,7 @@ function Activity(props) {
     let diff=endTime.toDate()-startTime.toDate();;
     let minutes=diff/(1000*60);
 
-
+ 
     let duration;
     let hours=Math.floor(minutes/60);
     let days=Math.floor(minutes/(60*24));
@@ -93,8 +94,6 @@ function Activity(props) {
   }
 
 
-
-  var i=0;
   const recursiveRevisitedActivitiesCompletion=(node)=>{
 
     if(node){
@@ -121,9 +120,9 @@ function Activity(props) {
   const activityCompletionHandler=()=>{
 
        if(props.data.activityDone.activityDoneStatus)
-        db_collection.doc(props.data.id).update({activityDone:{activityDoneStatus:false,timeStamp:new Date()}});
+        db_mainActivity_collection.doc(props.data.id).update({activityDone:{activityDoneStatus:false,timeStamp:new Date()}});
        else
-        db_collection.doc(props.data.id).update({activityDone:{activityDoneStatus:true,timeStamp:new Date()}});
+        db_mainActivity_collection.doc(props.data.id).update({activityDone:{activityDoneStatus:true,timeStamp:new Date()}});
 
       if(props.data.revisitedActivity && !props.data.activityDone.activityDoneStatus){
         recursiveRevisitedActivitiesCompletion(props.data.revisitedActivity);
@@ -134,9 +133,9 @@ function Activity(props) {
 
   const activityRevisitHandler=()=>{
 
-    let revisited_activity = db_collection.doc(props.data.id)
+    let revisited_activity = db_mainActivity_collection.doc(props.data.id)
     // debugger;
-    db_collection.add({activityName: props.data.activityName ,timeStamp: new Date(), activityDone:{activityDoneStatus:false,timeStamp:new Date()},isComment:props.data.isComment || false,revisitedActivity: revisited_activity});
+    db_mainActivity_collection.add({activityName: props.data.activityName ,timeStamp: new Date(), activityDone:{activityDoneStatus:false,timeStamp:new Date()},isComment:props.data.isComment || false,revisitedActivity: revisited_activity});
 
 
     let activities = document.getElementsByClassName("App-activities");
@@ -183,9 +182,9 @@ function Activity(props) {
 
   const addToQueueHandler = ()=>{
 
-      db_queue_collection.add(props.data);
+      db_queueActivity_collection.add(props.data);
 
-      db_collection.doc(props.data.id).delete();
+      db_mainActivity_collection.doc(props.data.id).delete();
 
   }
 
@@ -194,7 +193,7 @@ function Activity(props) {
   //this dismiss activity option,it is still present in the db, the reason being this is introduced, just making that complete
   //doesnot provide any semantic meaning 
   const dismissActivityHandler=()=>{
-    let dismissing_doc = db_collection.doc(props.data.id);
+    let dismissing_doc = db_mainActivity_collection.doc(props.data.id);
     if(props.data.cantResolve)
       dismissing_doc.update({cantResolve: false});
     else
@@ -204,7 +203,7 @@ function Activity(props) {
   }
 
   const ToggleCommentHandler=()=>{
-    let commenting_doc = db_collection.doc(props.data.id);
+    let commenting_doc = db_mainActivity_collection.doc(props.data.id);
     if(props.data.isComment)
       commenting_doc.update({isComment: false});
     else
@@ -215,7 +214,7 @@ function Activity(props) {
   const deleteActivityHandler = ()=>{
 
     if(window.confirm("Are you sure?"))
-      db_collection.doc(props.data.id).delete();
+      db_mainActivity_collection.doc(props.data.id).delete();
   }
 
 
