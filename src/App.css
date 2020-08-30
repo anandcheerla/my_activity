@@ -18,6 +18,11 @@
   margin-bottom: 20px;
 }
 
+#App-input{
+  display: flex;
+  align-items: center;
+}
+
 .Activity-activity{
   display: flex;
   align-items: center;
@@ -61,7 +66,3 @@ button:hover{
   cursor: pointer;
 }
 
-
-#App-akc-footer{
-   display: flex;
-}

@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import './App.css';
 import Activity from './Activity.js';
 import QueueActivity from './QueueActivity.js';
@@ -27,7 +28,7 @@ function App() {
   const [devMode,setDevMode] = useState(false);
   const [queueMode,setQueueMode] = useState(false);
   const [queueActivities,setQueueActivities] = useState([]);
-  const [commentCheckBoxChecked, setCommentCheckBoxChecked] = React.useState(true);
+  const [commentCheckBoxChecked, setCommentCheckBoxChecked] = React.useState(false);
 
 
   const [user,setUser] = useState(null);
@@ -189,8 +190,6 @@ function App() {
   };
 
 
-
-
  // console.log("one");
 
  return (
@@ -202,21 +201,18 @@ function App() {
     <>
     <div>
       <form noValidate autoComplete="off">
-        <div>  
-          <TextField id="App-activity-input" label="Enter Activity" variant="filled" />
+        <div id="App-input"> 
+          <form onSubmit={(e)=>{queueMode?queueActivitySubmitHandler(e):activitySubmit(e)}}> 
+           <TextField className="ui-icons" id="App-activity-input" label="Enter Activity" variant="filled" />
+          </form>
+          <AddCircleOutlineIcon className="ui-icons" style={darkMode ? {color: "white"} : {color:"black"}} onClick={(e)=>{queueMode?queueActivitySubmitHandler(e):activitySubmit(e)}}/>
           {
           !commentCheckBoxChecked
           ?
-          <ChatBubbleOutlineIcon style={darkMode ? {color: "white"} : {color:"black"}} onClick={commentCheckBoxHandler}/>
+          <ChatBubbleOutlineIcon className="ui-icons" style={darkMode ? {color: "white"} : {color:"black"}} onClick={commentCheckBoxHandler}/>
           :
-          <ChatBubbleIcon style={darkMode ? {color: "white"} : {color:"black"}} onClick={commentCheckBoxHandler}/>
+          <ChatBubbleIcon className="ui-icons" style={darkMode ? {color: "white"} : {color:"black"}} onClick={commentCheckBoxHandler}/>
           }
-          <Button type="submit" onClick={(e)=>{queueMode?queueActivitySubmitHandler(e):activitySubmit(e)}} color="primary">
-
-
-
-          submit
-          </Button>
         </div>
         <div>
           <button id="App-dark-mode-button" onClick={chooseTheme}>Dark Mode</button>

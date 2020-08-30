@@ -22,7 +22,17 @@
 }*/
 
 #App-akc-footer{
-   position: absolute;
+   position: fixed;
    bottom: 0;
+   opacity: 0.5;
 }
 
+#Login-app-instructions-heading{
+	border: 1px solid grey;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+#Login-app-instructions-heading:hover{
+	cursor: pointer;
+}
